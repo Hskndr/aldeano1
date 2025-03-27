@@ -29,7 +29,7 @@ def prioritize_urls_with_keywords(urls, keywords):
     return prioritized_urls
 
 def evaluate_match(context_text):
-    print(f'  ⭐️  Evaluating match in {context_text}')
+    print(f'  ⭐️  Evaluating match in COMPANY')
     try:
         # Expresión regular para verificar el formato de un CIF español
         #cif_pattern = r'[ABCDEFGHJKLMNPQRSUVW]{1}\d{7}[0-9A-J]{1}'
@@ -62,15 +62,15 @@ def search_strings_in_links(links, search_strings, excluded_words):
             # Agregar un retraso aleatorio en segundos
             # Verificar si iteration_number es un múltiplo de 20
             if iteration_number % 20 == 0:
-                delay = random.uniform(10, 20)
+                delay = random.uniform(60, 80)
                 time.sleep(delay)
             else:
-                delay = random.uniform(3, 7)
+                delay = random.uniform(25, 55)
                 time.sleep(delay)
             
             # Ingresar al Enlace
             print(f'*** Try in {link} waiting {delay} {iteration_number}/{size_of_links}')
-            response = requests.get(link, timeout=30)
+            response = requests.get(link, timeout=60)
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, 'html.parser')
             
@@ -135,7 +135,7 @@ def save_cif_info(id_company, name_company, url_company, cif, link):
     }
 
     # Abrir el archivo CSV en modo de escritura y agregar la información
-    with open(csv_filename, mode='a', newline='') as csv_file:
+    with open(csv_filename, mode='a', newline='',encoding="utf-8" ) as csv_file:
         fieldnames = ['Empresa_ID', 'Empresa', 'website', 'CIF', 'enlace CIF']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 

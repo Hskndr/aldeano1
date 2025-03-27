@@ -22,7 +22,7 @@ def find_cif_on_google(name_company):
             
             #FIXME - Aqui se produjo un error con la compania "Firefish Capital, SL"
             print(' ❤️‍🔥  page_text')
-            print(page_text)
+            
             # evaluear si tiene algun cif
             page_content_any_cif = evaluate_match(page_text)
             

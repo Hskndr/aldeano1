@@ -41,6 +41,46 @@ def process_company_columns(df, id_column, empresa_column, website_column):
     else:
         return pd.DataFrame(columns=['Empresa_ID', 'Empresa', 'website'])
 
+
+import pandas as pd
+
+def clean_non_bmp(text):
+    """ Elimina caracteres fuera del Basic Multilingual Plane (BMP) """
+    return ''.join(c for c in text if c <= '\uFFFF')
+
+def read_urls_from_csv(filename):
+    print(f"  💚  Leyendo archivo CSV: {filename}")
+    try:
+        # Leer el archivo CSV con encoding forzado y manejo de errores
+        df = pd.read_csv(filename, encoding="latin-1")
+        print(f"  🔍 DataFrame original tiene {len(df)} filas y {len(df.columns)} columnas")
+
+        # Limpiar nombres de columnas eliminando espacios en blanco
+        df.columns = df.columns.str.strip()
+        print(df)
+        # Comprobar que df no esté vacío
+        if df.empty:
+            print("    💚  El DataFrame está vacío")
+            return None
+        else:
+            print("    💚  El DataFrame no está vacío")
+
+            # Limpiar datos (eliminar caracteres fuera del BMP en todas las columnas de tipo texto)
+            for col in df.select_dtypes(include=['object']).columns:
+                df[col] = df[col].astype(str).apply(clean_non_bmp)
+
+            # Comprobar si es un archivo de contactos o empresas
+            if 'Contacto_ID' in df.columns or 'Member_id' in df.columns:
+                return process_contact_file(df)
+            else:
+                return process_company_file(df)
+
+    except Exception as e:
+        print(f"Error al leer el archivo CSV: {e}")
+        return None
+    
+'''
+   
 # Función principal para leer el archivo CSV
 def read_urls_from_csv(filename):
     print(f"  💚  Leyendo archivo CSV: {filename}")
@@ -68,6 +108,7 @@ def read_urls_from_csv(filename):
     except Exception as e:
         print(f"Error al leer el archivo CSV: {e}")
         return None
+'''
 
 '''
 import pandas as pd
